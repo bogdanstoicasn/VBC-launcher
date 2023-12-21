@@ -3,7 +3,7 @@ import tkinter as tk
 from itertools import cycle
 from tkinter import font
 from typing import NamedTuple
-
+import webbrowser
 
 class Player(NamedTuple):
     label: str
@@ -103,7 +103,7 @@ class TicTacToeBoard(tk.Toplevel):
         super().__init__()
         self.title("Tic-Tac-Toe Game")
         self.resizable(False, False)
-        self.geometry("400x400")
+        self.geometry("400x430")
         self._cells = {}
         self._game = game
         self.create_menu()
@@ -117,7 +117,9 @@ class TicTacToeBoard(tk.Toplevel):
         file_menu = tk.Menu(master=menu_bar)
         file_menu.add_command(label="New game", command=self.reset_board)
         file_menu.add_separator()
-        file_menu.add_command(label="Exit", command=quit)
+        def open_url():
+            webbrowser.open_new("https://www.wikihow.com/Play-Tic-Tac-Toe")
+        file_menu.add_command(label="How to play", command=open_url)
         menu_bar.add_cascade(label="File", menu=file_menu)
 
     def create_board_display(self):
