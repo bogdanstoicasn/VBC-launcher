@@ -1,22 +1,33 @@
 import tkinter as tkinter
-from tkinter import ttk
+import easygui
 from screeninfo import get_monitors
 from datetime import datetime
 import os
+import sys
+import subprocess
+import functools
 from PIL import Image, ImageTk
 
+from games.tic_tac_toe import play_tic_tac_toe
 # Creation of child window
-def enter_game(game, window):
-    mode = tkinter.Toplevel(window)
-    mode.title(game)
-    message = "You have entered " + game + "!"
-    label = tkinter.Label(mode, text=message)
-    label.pack()
-    second_label = tkinter.Label(mode, text="Coming soon!")
-    second_label.pack()
+def enter_game(game):
+    match game:
+        case "Tic-Tac-Toe":
+             return play_tic_tac_toe()
+        case "Snake":
+            return print("Snake")
+        case "Sudoku":
+            return print("Sudoku")
+        case "Dice Game":
+            return print("Dice Game")
+        case "Asteroids":
+            return print("Asteroids")
+        case _:
+            return print("Game not found")
+
 
 # Centers the position of the window
-def window_position(width, height, window):
+def window_position(width, height):
     monitors = get_monitors()
     if monitors:
         primary_monitor = monitors[0]
@@ -34,10 +45,33 @@ def window_position(width, height, window):
 def update_clock(label):
     current_time = datetime.now().strftime("%H:%M:%S")
     label.config(text=current_time)
-    label.after(1000, lambda: update_clock(label))
+    label.after(1000, lambda l=label: update_clock(l))
+    
+def run_selected_file(file_path):
+    try:
+        if file_path.endswith('.py') or os.access(file_path, os.X_OK):
+            subprocess.run([sys.executable, os.path.abspath(file_path)], check=True)
+        else:
+            print("Selected file is not a Python script or executable.")
+    except subprocess.CalledProcessError as e:
+        print(f"Error opening file: {e}")
+
+def open_file_explorer():
+    try:
+        # Open the file dialog to choose a file
+        file_path = easygui.fileopenbox()
+
+        # Check if a file was selected
+        if file_path:
+            # Run the selected file
+            run_selected_file(file_path)
+
+    except Exception as e:
+        print(f"Error: {e}")
+
 
 # Modify for our games
-game_array = ["Snake", "Sudoku", "Dice Game", "Asteroids"]
+game_array = ["Snake", "Sudoku", "Dice Game", "Asteroids", "Tic-Tac-Toe"]
 # Modify for our games
 
 
@@ -52,7 +86,7 @@ def main():
     window.resizable(False, False)
 
     # Position of the window on the screen
-    x_offset, y_offset, screen_width, screen_height = window_position(400, 400, window)
+    x_offset, y_offset, screen_width, screen_height = window_position(400, 480)
     window.geometry(f"{x_offset}x{y_offset}+{screen_width}+{screen_height}")
     window.configure(bg="#5D3FD3")
 
@@ -64,33 +98,47 @@ def main():
         bg="#5D3FD3"
     )
     welcome_text.pack(side="top", pady=(0, 20))
-
-    clock_label = tkinter.Label(window, text="", font=("Arial", 10), bg="#5D3FD3", fg="#E2DFD2")
-    clock_label.pack(side="bottom", anchor="se", padx=10, pady=10)
+    frame1 = tkinter.Frame(window, bg="#5D3FD3")
+    clock_label = tkinter.Label(frame1, text="", font=("Arial", 10), bg="#5D3FD3", fg="#E2DFD2")
+    clock_label.grid(row=0, column=1, sticky="e", padx=210, pady=5)
+    launch_external_button = tkinter.Button(
+        frame1,
+        text="Open File Explorer",
+        command=functools.partial(open_file_explorer),
+        bg="#5D3FD3",  # Background color
+        fg="#E2DFD2",  # Text color
+        font=("Arial", 8, "underline"),
+        padx=10,
+        pady=5,
+        highlightthickness=0,
+        relief=tkinter.FLAT,
+        activebackground="#5D3FD3",  # Background color when clicked
+        activeforeground="#000000"
+    )
+    launch_external_button.grid(row=0, column=0, sticky="w", padx=5, pady=5)
+    frame1.pack(side="bottom", anchor="center")
 
     update_clock(clock_label)
 
-
-    frame = tkinter.Frame(window, bg="#5D3FD3")
-    frame.pack()
 
     frame = tkinter.Frame(window, bg="#5D3FD3")
     frame.pack(pady=10)
 
     for i, game in enumerate(game_array):
         image_path = current_path + "/images/" + game + ".jpg"
-
         # Open the image using Pillow
         img = Image.open(image_path)
         button_size = (75, 75)  # Adjust the size as needed
         img = img.resize(button_size)
-
         # Convert the image to Tkinter PhotoImage
         img = ImageTk.PhotoImage(img)
+
+        # Get the function to call when the button is clicked
+        function = enter_game
         # Assign the game to the button
         button = tkinter.Button(
             frame,
-            command=lambda t=game: enter_game(game, window),
+            command=functools.partial(function, game),
             image=img,
             text=game,
             borderwidth=5,  # Remove border
@@ -102,6 +150,7 @@ def main():
         button.image = img  # Keep a reference to the image to prevent garbage collection
         button.grid(row=i // 2, column=i % 2, sticky="ew", padx=10, pady=5)
 
+    
     exit_button = tkinter.Button(
         window,
         text="Exit",
