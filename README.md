@@ -69,6 +69,16 @@ Install Tkinter:
 
     Step 3.3: sudo apt-get install python3-tk
 
+Install screeninfo:
+
+    Step 3.4: pip install screeninfo
+
+Upgrade pip and pillow:
+
+    Step 3.5: pip install --upgrade pip
+
+    Step 3.6: pip install --upgrade pillow
+
 3. Run the launcher:
 
     `python3 vbc-launcher.py`
