@@ -9,3 +9,9 @@ docker build -t your_image_name .
 docker run -u=$(id -u $USER):$(id -g $USER) -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v $(pwd):/app --rm your_image_name
 </code>
 
+*FOR BEST EXPERIENCE DON'T USE DOCKER, INSTEAD do:*
+    sudo apt install python3
+
+    
+    pip install easygui
+
