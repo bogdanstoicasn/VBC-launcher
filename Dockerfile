@@ -29,9 +29,6 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Set up X11 forwarding
-ENV DISPLAY=:0
-
 # Copy the script and images into the container
 COPY vbc-launcher.py /app/
 COPY games /app/games
