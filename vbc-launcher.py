@@ -7,6 +7,7 @@ import sys
 import subprocess
 import functools
 from PIL import Image, ImageTk
+import webbrowser
 
 from games.tic_tac_toe import play_tic_tac_toe
 from games.sudoku.sudoku import play_sudoku
@@ -23,17 +24,19 @@ def enter_game(game):
             return print("Dice Game")
         case "Asteroids":
             return print("Asteroids")
+        case "Info":
+            return webbrowser.open("https://github.com/bogdanstoicasn/VBC-launcher")
         case _:
             return print("Game not found")
 
 
 # Centers the position of the window
 def window_position(width, height):
-    monitors = get_monitors()
-    if monitors:
-        primary_monitor = monitors[0]
-        screen_width = primary_monitor.width
-        screen_height = primary_monitor.height
+    root = tkinter.Tk()
+    root.attributes("-fullscreen", True)
+    screen_width = root.winfo_screenwidth()
+    screen_height = root.winfo_screenheight()
+    root.destroy()
 
     width = min(width, screen_width)
     height = min(height, screen_height)
@@ -72,7 +75,7 @@ def open_file_explorer():
 
 
 # Modify for our games
-game_array = ["Snake", "Sudoku", "Dice Game", "Asteroids", "Tic-Tac-Toe"]
+game_array = ["Snake", "Sudoku", "Dice Game", "Asteroids", "Tic-Tac-Toe", "Info"]
 # Modify for our games
 
 
