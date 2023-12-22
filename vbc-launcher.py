@@ -150,6 +150,8 @@ def main():
             highlightthickness=0,  # Remove highlight
             activebackground="#E2DFD2",  # Background color when clicked
         )
+        if game == "Info":
+            button.configure(relief=tkinter.GROOVE, activeforeground="#5D3FD3", activebackground="#E2DFD2")
         button.image = img  # Keep a reference to the image to prevent garbage collection
         button.grid(row=i // 2, column=i % 2, sticky="ew", padx=10, pady=5)
 
