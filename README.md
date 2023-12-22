@@ -16,3 +16,7 @@ docker run -u=$(id -u $USER):$(id -g $USER) -e DISPLAY=$DISPLAY -v /tmp/.X11-uni
     
     pip install easygui
 
+# Contributors
+
+[![GitHub contributors](https://img.shields.io/github/contributors/yourusername/yourrepository.svg)](https://github.com/yourusername/yourrepository/graphs/contributors)
+
