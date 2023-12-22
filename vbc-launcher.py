@@ -9,6 +9,7 @@ import functools
 from PIL import Image, ImageTk
 
 from games.tic_tac_toe import play_tic_tac_toe
+from games.sudoku.sudoku import play_sudoku
 # Creation of child window
 def enter_game(game):
     match game:
@@ -17,7 +18,7 @@ def enter_game(game):
         case "Snake":
             return print("Snake")
         case "Sudoku":
-            return print("Sudoku")
+            return play_sudoku()
         case "Dice Game":
             return print("Dice Game")
         case "Asteroids":
@@ -171,4 +172,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
