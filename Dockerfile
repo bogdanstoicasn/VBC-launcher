@@ -7,6 +7,7 @@ WORKDIR /app
 # Install required system packages
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
+    apt-utils\
     tk \
     libgl1-mesa-glx \
     libx11-xcb1 \
