@@ -10,7 +10,7 @@ from PIL import Image, ImageTk
 
 from games.tic_tac_toe import play_tic_tac_toe
 from games.sudoku.sudoku import play_sudoku
-# Creation of child window
+# add here imports and the game running function
 def enter_game(game):
     match game:
         case "Tic-Tac-Toe":
