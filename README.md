@@ -35,17 +35,16 @@ A simple game launcher written in Python using Tkinter. Launch your favorite gam
 
 1. Clone the repository:
 
->   `git clone https://github.com/bogdanstoicasn/VBC-launcher.git`
+>   git clone https://github.com/bogdanstoicasn/VBC-launcher.git
 
 2. Navigate to the project directory:
-    
->   `cd VBC-launcher` 
+
+>   cd VBC-launcher
 
 
 ### Docker(not recommended):
 
 `Step 3.1: docker build -t your_image_name .`
-
 <code>
 Step 3.2: docker run -u=$(id -u $USER):$(id -g $USER) -e DISPLAY=$DISPLAY -v /tmp/.X11-unix:/tmp/.X11-unix:rw -v $(pwd):/app --rm your_image_name
 </code>
