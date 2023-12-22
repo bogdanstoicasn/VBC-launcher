@@ -1,6 +1,5 @@
 import tkinter as tkinter
 import easygui
-from screeninfo import get_monitors
 from datetime import datetime
 import os
 import sys
