@@ -25,6 +25,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the script and images into the container
 COPY vbc-launcher.py /app/
+COPY games /app/games
 COPY images /app/images
 
 # Run the GUI application
