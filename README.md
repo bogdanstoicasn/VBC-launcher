@@ -10,6 +10,7 @@ docker run -u=$(id -u $USER):$(id -g $USER) -e DISPLAY=$DISPLAY -v /tmp/.X11-uni
 </code>
 
 *FOR BEST EXPERIENCE DON'T USE DOCKER, INSTEAD do:*
+
     sudo apt install python3
 
     
