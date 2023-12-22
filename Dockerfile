@@ -23,6 +23,15 @@ RUN apt-get update && \
 COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
+# Install X11 utilities
+RUN apt-get update && \
+    apt-get install -y xauth && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# Set up X11 forwarding
+ENV DISPLAY=:0
+
 # Copy the script and images into the container
 COPY vbc-launcher.py /app/
 COPY games /app/games
@@ -30,4 +39,3 @@ COPY images /app/images
 
 # Run the GUI application
 CMD ["python", "vbc-launcher.py"]
-
