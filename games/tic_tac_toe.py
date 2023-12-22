@@ -102,7 +102,7 @@ class TicTacToeBoard(tk.Toplevel):
     def __init__(self, game):
         super().__init__()
         self.title("Tic-Tac-Toe Game")
-        self.resizable(False, False)
+        #self.resizable(False, False)
         self.geometry("400x430")
         self._cells = {}
         self._game = game
