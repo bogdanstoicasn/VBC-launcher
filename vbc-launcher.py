@@ -10,6 +10,7 @@ import webbrowser
 
 from games.tic_tac_toe import play_tic_tac_toe
 from games.sudoku.sudoku import play_sudoku
+from games.dice import play_dice
 # add here imports and the game running function
 def enter_game(game):
     match game:
@@ -20,7 +21,7 @@ def enter_game(game):
         case "Sudoku":
             return play_sudoku()
         case "Dice Game":
-            return print("Dice Game")
+            return play_dice()
         case "Asteroids":
             return print("Asteroids")
         case "Info":
