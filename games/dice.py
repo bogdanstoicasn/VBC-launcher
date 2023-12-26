@@ -25,7 +25,9 @@ class DiceWindow(tk.Toplevel):
         self.geometry("400x300")
         self.configure(bg="#000080")
         self.dice = Die()
-        self.destroyed = False  # Flag to track if the window is destroyed
+
+        # flag to track if the window is destroyed
+        self.destroyed = False
 
     def configDisplay(self):
         display_frame = tk.Frame(master=self, background="#000080")
@@ -93,14 +95,14 @@ class DiceWindow(tk.Toplevel):
 
         T.insert(tk.END, "Let's see what you will get..\n")
 
-        # Image label
         image_label = tk.Label(self, background = "#000080")
         image_label.pack()
 
+        # initialise rolling button
         button = tk.Button(self, text="Roll!",bg = "#FFFF00", command=lambda: self.atRoll(T, image_label))
         button.pack(side=tk.BOTTOM, pady=20)
 
-        # Handle window closing
+        # handle window closing
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
 
     def on_closing(self):
