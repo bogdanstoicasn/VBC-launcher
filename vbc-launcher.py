@@ -1,4 +1,5 @@
 import tkinter as tkinter
+import pygame
 import easygui
 from datetime import datetime
 import os
@@ -11,13 +12,14 @@ import webbrowser
 from games.tic_tac_toe import play_tic_tac_toe
 from games.sudoku.sudoku import play_sudoku
 from games.dice import play_dice
+from games.snake.snake import run_snake
 # add here imports and the game running function
 def enter_game(game):
     match game:
         case "Tic-Tac-Toe":
              return play_tic_tac_toe()
         case "Snake":
-            return print("Snake")
+            return run_snake()
         case "Sudoku":
             return play_sudoku()
         case "Dice Game":
