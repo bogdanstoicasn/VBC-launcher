@@ -96,5 +96,5 @@ launcher(can run excutables/Python scripts).
 
 # Contributors
 
-[![GitHub contributors](https://img.shields.io/github/contributors/yourusername/yourrepository.svg)](https://github.com/yourusername/yourrepository/graphs/contributors)
+[![GitHub contributors](https://img.shields.io/github/contributors/bogdanstoicasn/VBC-launcher.svg)](https://github.com/yourusername/yourrepository/graphs/contributors)
 
