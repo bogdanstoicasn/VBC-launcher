@@ -1,7 +1,23 @@
 import pygame
 from time import sleep
 from random import randint
-from ctypes import windll
+import os
+
+try:
+    from ctypes import windll
+
+    def set_window_position():
+        SetWindowPos = windll.user32.SetWindowPos
+        SetWindowPos(pygame.display.get_wm_info()['window'], -1, x_axis, y_axis, 0, 0, 0x0001)
+
+except ImportError:
+    def set_window_position():
+        if os.name == 'posix':
+            # Set the SDL_VIDEO_WINDOW_POS environment variable for Linux
+            os.environ['SDL_VIDEO_WINDOW_POS'] = f"{x_axis},{y_axis}"
+        else:
+            # Handle the error for non-Windows systems
+            print("Not running on Windows, alternative implementation here")
 
 x_axis, y_axis = 400, 400
 
@@ -162,7 +178,7 @@ def play_snake(window, skin):
         pygame.display.update()
 
         # set 10 fps speed of snake
-        fps.tick(10)                
+        fps.tick(20)                
                         
     pygame.quit()      
 
@@ -285,8 +301,7 @@ def run_snake():
     window = pygame.display.set_mode((x_axis, y_axis))
 
     # initialise window to always be in foreground
-    SetWindowPos = windll.user32.SetWindowPos
-    SetWindowPos(pygame.display.get_wm_info()['window'], -1, x_axis, y_axis, 0,0, 0x0001)
+    set_window_position()
 
     pygame.display.set_caption('Snake game!')
 
