@@ -1,5 +1,4 @@
 import tkinter as tkinter
-import pygame
 import easygui
 from datetime import datetime
 import os
@@ -16,21 +15,38 @@ from games.snake.snake import run_snake
 
 # add here imports and the game running function
 def enter_game(game):
-    match game:
-        case "Tic-Tac-Toe":
-             return play_tic_tac_toe()
-        case "Snake":
+    try:
+        match game:
+            case "Tic-Tac-Toe":
+                return play_tic_tac_toe()
+            case "Snake":
+                return run_snake()
+            case "Sudoku":
+                return play_sudoku()
+            case "Dice Game":
+                return play_dice()
+            case "Asteroids":
+                return print("Asteroids")
+            case "Info":
+                return webbrowser.open("https://github.com/bogdanstoicasn/VBC-launcher")
+            case _:
+                return print("Game not found")
+
+    except:
+        if game == "Tic-Tac-Toe":
+            return play_tic_tac_toe()
+        elif game == "Snake":
             return run_snake()
-        case "Sudoku":
+        elif game == "Sudoku":
             return play_sudoku()
-        case "Dice Game":
+        elif game == "Dice Game":
             return play_dice()
-        case "Asteroids":
+        elif game == "Asteroids":
             return print("Asteroids")
-        case "Info":
+        elif game == "Info":
             return webbrowser.open("https://github.com/bogdanstoicasn/VBC-launcher")
-        case _:
-            return print("Game not found")
+        else:
+            return print("Game not found")                         
 
 
 # Centers the position of the window
