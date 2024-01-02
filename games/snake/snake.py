@@ -126,10 +126,10 @@ def play_snake(window, skin):
     score = 0
     fps = pygame.time.Clock()
 
-    cond = True
+    # no replay by default
     play_again = False
 
-    while cond:
+    while True:
 
         # erase board after every clock cycle
         window.fill(pygame.Color(0,0,0))
@@ -178,7 +178,7 @@ def play_snake(window, skin):
 
         if check_collision(head, body):
             play_again = game_over(score, window)
-            cond = False
+            break
 
         # display score on screen and update every cycle
         get_score(score, window)
