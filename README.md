@@ -27,7 +27,7 @@ A simple game launcher written in Python using Tkinter. Launch your favorite gam
 
 ## Requirements
 
-- Python 3.6 or above
+- Python 3.10 or above
 - Tkinter (usually included with Python installation)
 - easygui (install using `pip install easygui`)
 - Pygame 2.5.2
