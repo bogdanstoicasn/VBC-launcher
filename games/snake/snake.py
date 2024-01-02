@@ -55,13 +55,16 @@ def game_over(score, window):
     # initialise final score and high score texts
     over_font = pygame.font.SysFont("times new roman", 50)
     highscore_font = pygame.font.SysFont("times new roman", 20)
+    replay_font = pygame.font.SysFont("times new roman", 20)
 
     over_surface = over_font.render("Your score: " + str(score), True, pygame.Color(255, 255, 255))
     highscore_surface = highscore_font.render("Your high score: " + str(highscore), True, pygame.Color(255, 255, 255))
+    replay_surface = replay_font.render("Or press ENTER to play again", True, pygame.Color(255, 255, 255))
 
     # change text box positions
     over_rectangle = over_surface.get_rect(midtop=(x_axis / 2, y_axis / 4))
     highscore_rectangle = highscore_surface.get_rect(midtop=(x_axis / 2, y_axis / 2 - 40))
+    replay_rectangle = replay_surface.get_rect(midtop=(x_axis / 2, y_axis / 2 + 160))
 
     # wait 2 seconds after collision and wipe screen
     sleep(2)
@@ -69,15 +72,18 @@ def game_over(score, window):
 
     window.blit(over_surface, over_rectangle)
     window.blit(highscore_surface, highscore_rectangle)
+    window.blit(replay_surface, replay_rectangle)
     pygame.display.flip()
 
-    # wait for manual quit after loss
+    # wait for manual quit after loss or replay
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return False
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                 return False
+            elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
+                return True    
 
 def init_fruit():
     # generate random fruit on table
@@ -121,6 +127,7 @@ def play_snake(window, skin):
     fps = pygame.time.Clock()
 
     cond = True
+    play_again = False
 
     while cond:
 
@@ -170,17 +177,19 @@ def play_snake(window, skin):
             body.pop()    
 
         if check_collision(head, body):
-            cond = game_over(score, window)
+            play_again = game_over(score, window)
+            cond = False
 
         # display score on screen and update every cycle
         get_score(score, window)
 
         pygame.display.update()
 
-        # set 10 fps speed of snake
-        fps.tick(20)                
-                        
-    pygame.quit()      
+        # set 20 fps speed of snake
+        fps.tick(20)
+
+    return play_again                   
+         
 
 def title_screen(window):
     
@@ -294,7 +303,6 @@ def choose_skin(window):
                     pygame.display.flip()
                     return skins[selected_skin]
         
-
 def run_snake():
 
     # create window on run
@@ -319,7 +327,12 @@ def run_snake():
 
     # wait 2 seconds before start
     sleep(2)
-    play_snake(window, skin)
+
+    # restart the function for every replay
+    while play_snake(window, skin):
+        pass
+
+    pygame.quit() 
 
 if __name__ == "__main__":
     pygame.init()
