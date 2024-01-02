@@ -66,6 +66,10 @@ or
 
     Step 3.2: python3 -m pip install easygui
 
+Install pygame:
+
+    Step 3.3: pip install pygame
+
 Install Tkinter:
 
     Step 3.3: sudo apt-get install python3-tk
