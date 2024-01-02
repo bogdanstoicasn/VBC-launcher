@@ -13,6 +13,7 @@ from games.tic_tac_toe import play_tic_tac_toe
 from games.sudoku.sudoku import play_sudoku
 from games.dice import play_dice
 from games.snake.snake import run_snake
+
 # add here imports and the game running function
 def enter_game(game):
     match game:
@@ -75,6 +76,26 @@ def open_file_explorer():
     except Exception as e:
         print(f"Error: {e}")
 
+def launcher_icon(window):
+    current_path = os.path.dirname(os.path.realpath(__file__))
+    icon_path = current_path + "/images/icons/1.jpg"
+    try:
+    # Open the image with Pillow
+        pil_image = Image.open(icon_path)
+
+    # Resize the image to fit the icon size if needed
+    # You can adjust the size based on your requirements
+        pil_image = pil_image.resize((32, 32))
+
+    # Convert the image to Tkinter format
+        icon_image = ImageTk.PhotoImage(pil_image)
+
+    # Set the window icon
+        window.iconphoto(True, icon_image)
+    except Exception as e:
+    # Handle the error if the image file is not found or not supported
+        print(f"Error loading icon: {e}, using default icon.")
+
 
 # Modify for our games
 game_array = ["Snake", "Sudoku", "Dice Game", "Asteroids", "Tic-Tac-Toe", "Info"]
@@ -90,8 +111,7 @@ def main():
     window = tkinter.Tk()
     window.title("VBC-LAUNCHER")
     window.resizable(False, False)
-
-    # Position of the window on the screen
+    launcher_icon(window)
     x_offset, y_offset, screen_width, screen_height = window_position(400, 480)
     window.geometry(f"{x_offset}x{y_offset}+{screen_width}+{screen_height}")
     window.configure(bg="#5D3FD3")
