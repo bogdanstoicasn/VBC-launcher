@@ -45,7 +45,7 @@ def enter_game(game):
         elif game == "Dice Game":
             return play_dice()
         elif game == "Asteroids":
-           subprocess.run(["python", "./games/asteroizi/asteroizi.py"])
+            subprocess.run(["python", "./games/asteroizi/asteroizi.py"])
             return None
         elif game == "Wordle":
             return print("Wordle")
