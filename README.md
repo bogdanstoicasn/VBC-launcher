@@ -25,12 +25,15 @@ A simple game launcher written in Python using Tkinter. Launch your favorite gam
 5. **Snake**
    - Control a snake to eat food and grow longer without hitting the walls.
 
+6. **Worlde**
+    - A game with words
+
 ## Requirements
 
 - Python 3.10 or above
 - Tkinter (usually included with Python installation)
 - easygui (install using `pip install easygui`)
-- Pygame 2.5.2
+- Pygame 2.5.2 (install using `pip install pygame`)
 
 ## Build and Run
 

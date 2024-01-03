@@ -340,4 +340,5 @@ def run_snake():
 
 if __name__ == "__main__":
     pygame.init()
-    run_snake()   
+    run_snake()
+ 
