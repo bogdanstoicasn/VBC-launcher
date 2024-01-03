@@ -20,7 +20,7 @@ except ImportError:
             print("Not running on Windows, alternative implementation here")
 
 x_axis, y_axis = 400, 400
-tick = 10
+tick = 8
 accelerate = 1
 def read_highscore():
     # open high score file and read score
@@ -186,7 +186,7 @@ def play_snake(window, skin):
 
         pygame.display.update()
 
-        # set 10 fps speed of snake
+        # set speed of snake
         if score % (200 * accelerate) == 0 and score != 0:
             tick += accelerate
             accelerate += 1
