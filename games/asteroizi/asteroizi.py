@@ -30,11 +30,16 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 images_path = os.path.join(script_dir, "..", "..", "images", "asteroids images")
 
 # Încarcă imaginea navei spațiale
-ship_image_path = os.path.join(images_path, "spaceship.png")  
+ship_image_path = os.path.join(images_path, "spaceship.png")
 ship_image = pygame.image.load(ship_image_path)
 ship_rect = ship_image.get_rect()
 ship_rect.midbottom = (WIDTH // 2, HEIGHT - 10)
 ship_speed = 7
+
+# Încarcă imaginea de fundal
+background_image_path = os.path.join(images_path, "background.jpg")
+background_image = pygame.image.load(background_image_path)
+background_image = pygame.transform.scale(background_image, (WIDTH, HEIGHT))
 
 # Proiectil
 bullet_image = pygame.Surface((10, 20))
@@ -43,22 +48,29 @@ bullet_speed = 6
 bullets = []
 
 # Asteroid
-
 asteroid_image_path = os.path.join(images_path, "asteroids.png")
 asteroid_image = pygame.image.load(asteroid_image_path)
-asteroid_rect = asteroid_image.get_rect()
 asteroid_speed = 3
 asteroids = []
 
 # Resize the images to be 10 times smaller
 ship_image = pygame.transform.scale(ship_image, (ship_rect.width // 10, ship_rect.height // 10))
-asteroid_image = pygame.transform.scale(asteroid_image, (asteroid_rect.width // 9, asteroid_rect.height // 10))
+asteroid_image = pygame.transform.scale(asteroid_image, (asteroid_image.get_width() // 9, asteroid_image.get_height() // 10))
 
 # Update the rect objects with the new image sizes
 ship_rect = ship_image.get_rect(midbottom=(WIDTH // 2, HEIGHT - 10))
-asteroid_rect = asteroid_image.get_rect()
 
-
+# Funcție pentru generarea asteroizilor
+def generate_asteroid():
+    asteroid_rect = pygame.Rect(0, 0, asteroid_image.get_width(), asteroid_image.get_height())
+    asteroid_rect.midtop = (random.randint(0, WIDTH), 0)
+    
+    # Probabilitate de 10% pentru asteroizii de dimensiune dublă
+    if random.randint(1, 10) <= 5:
+        asteroid_rect.size = (asteroid_rect.width * 2, asteroid_rect.height * 2)
+        return Asteroid(asteroid_rect, size=2)
+    else:
+        return Asteroid(asteroid_rect, size=1)
 
 # Funcție pentru afișarea navei spațiale
 def draw_ship():
@@ -69,21 +81,24 @@ def draw_bullets():
     for bullet in bullets:
         pygame.draw.rect(screen, RED, bullet)
 
-# Funcție pentru afișarea asteroizilor
-def draw_asteroids():
-    for asteroid in asteroids:
-        screen.blit(asteroid_image, asteroid)
-
-# Funcție pentru actualizarea poziției proiectilelor
 def update_bullets():
     for bullet in bullets:
         bullet.y -= bullet_speed
 
-
-# Funcție pentru actualizarea poziției asteroizilor
-def update_asteroids():
+# Funcție pentru afișarea asteroizilor
+def draw_asteroids():
     for asteroid in asteroids:
-        asteroid.y += asteroid_speed
+        if asteroid.size == 2:
+            # Scalarea imaginii pentru asteroizii de dimensiune dublă
+            scaled_image = pygame.transform.scale(asteroid_image, (asteroid.rect.width, asteroid.rect.height))
+            screen.blit(scaled_image, asteroid.rect)
+        else:
+            screen.blit(asteroid_image, asteroid.rect)
+
+# Funcție pentru actualizarea pozițiilor asteroizilor
+def update_asteroids():
+    for asteroid in asteroids.copy():
+        asteroid.rect.y += asteroid_speed
 
 # Funcție pentru gestionarea evenimentelor
 def handle_events():
@@ -113,6 +128,47 @@ def handle_events():
                 up_pressed = False
             elif event.key == pygame.K_DOWN:
                 down_pressed = False
+
+# Funcție pentru gestionarea coliziunilor
+def check_collisions():
+    global score, lives
+
+    for bullet in bullets.copy():
+        for asteroid in asteroids.copy():
+            if bullet.colliderect(asteroid.rect):
+                if bullet in bullets:
+                    bullets.remove(bullet)
+                if asteroid.size == 2:
+                    # La spargerea unui asteroid de tip 2, genera 2 asteroizi de tip 1
+                    score += 2
+                    asteroids.remove(asteroid)
+                    asteroids.append(Asteroid(pygame.Rect(asteroid.rect.x, asteroid.rect.y, asteroid.rect.width // 2, asteroid.rect.height // 2), size=1))
+                    asteroids.append(Asteroid(pygame.Rect(asteroid.rect.x + asteroid.rect.width // 2, asteroid.rect.y, asteroid.rect.width // 2, asteroid.rect.height // 2), size=1))
+                else:
+                    score += 1
+                    asteroids.remove(asteroid)
+
+    for asteroid in asteroids.copy():
+        if ship_rect.colliderect(asteroid.rect):
+            asteroids.remove(asteroid)
+            if asteroid.size == 2:
+                # La impactul cu un asteroid de tip 2, pierzi 2 vieti
+                lives -= 2
+            else:
+                lives -= 1
+            if lives <= 0:
+                game_over()
+
+        # Verifică dacă asteroidul a ieșit din ecran pe partea de jos
+        if asteroid.rect.y > HEIGHT:
+            asteroids.remove(asteroid)
+            if asteroid.size == 2:
+                # Dacă asteroidul de tip 2 iese din ecran, pierzi 2 vieti
+                lives -= 2
+            else:
+                lives -= 1
+            if lives <= 0:
+                game_over()
 
 # Funcție pentru afișarea ecranului de game over
 def game_over():
@@ -149,45 +205,21 @@ def game_over():
                 waiting_for_retry = False
 
 
-# Funcție pentru gestionarea coliziunilor
-def check_collisions():
-    global score, lives
-
-    for bullet in bullets:
-        for asteroid in asteroids:
-            if bullet.colliderect(asteroid):
-                bullets.remove(bullet)
-                asteroids.remove(asteroid)
-                score += 1
-
-    for asteroid in asteroids:
-        if ship_rect.colliderect(asteroid):
-            asteroids.remove(asteroid)
-            lives -= 1
-            if lives == 0:
-                game_over()
-
-        # Verifică dacă asteroidul a ieșit din ecran pe partea de jos
-        if asteroid.y > HEIGHT:
-            asteroids.remove(asteroid)
-            lives -= 1
-            if lives == 0:
-                game_over()
-
 # Setează fontul pentru text
 font = pygame.font.Font(None, 36)
-
-
 
 # Loop principal
 frame_count = 59
 font = pygame.font.Font(None, 36)
 clock = pygame.time.Clock()
 
-clock = pygame.time.Clock()
+class Asteroid:
+    def __init__(self, rect, size=1):
+        self.rect = rect
+        self.size = size  # 1 pentru normal, 2 pentru dublă
+        self.alive = True
+
 while True:
-    score_text = font.render(f"Score: {score}", True, (0, 0, 0))
-    lives_text = font.render(f"Lives: {lives}", True, (0, 0, 0))
     handle_events()
     frame_count += 1
 
@@ -211,9 +243,7 @@ while True:
 
     # Generare asteroizi
     if frame_count % 60 == 0 and random.randint(1, 100) <= 75:
-        asteroid_rect = asteroid_image.get_rect()
-        asteroid_rect.midtop = (random.randint(0, WIDTH), 0)
-        asteroids.append(asteroid_rect)
+        asteroids.append(generate_asteroid())
 
     # Actualizare poziție și verificare coliziuni
     update_asteroids()
@@ -221,12 +251,14 @@ while True:
     check_collisions()
 
     # Desenare pe ecran
-    screen.fill(WHITE)
+    screen.blit(background_image, (0, 0))  # Afisare imagine de fundal
     draw_ship()
     draw_bullets()
     draw_asteroids()
 
     # Afisare scor
+    score_text = font.render(f"Score: {score}", True, (0, 0, 0))
+    lives_text = font.render(f"Lives: {lives}", True, (0, 0, 0))
     screen.blit(score_text, (10, 10))
     screen.blit(lives_text, (10, 10 + score_text.get_height()))
 
@@ -235,9 +267,6 @@ while True:
 
     # Control FPS
     clock.tick(60)
-
-    # Clear ecran pentru a preveni urmele
-    screen.fill(WHITE)
 
 pygame.quit()
 sys.exit()
