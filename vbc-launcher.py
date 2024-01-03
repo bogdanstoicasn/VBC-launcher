@@ -27,6 +27,8 @@ def enter_game(game):
                 return play_dice()
             case "Asteroids":
                 return print("Asteroids")
+            case "Wordle":
+                return print("Wordle")
             case "Info":
                 return webbrowser.open("https://github.com/bogdanstoicasn/VBC-launcher")
             case _:
@@ -43,6 +45,8 @@ def enter_game(game):
             return play_dice()
         elif game == "Asteroids":
             return print("Asteroids")
+        elif game == "Wordle":
+            return print("Wordle")
         elif game == "Info":
             return webbrowser.open("https://github.com/bogdanstoicasn/VBC-launcher")
         else:
@@ -114,7 +118,7 @@ def launcher_icon(window):
 
 
 # Modify for our games
-game_array = ["Snake", "Sudoku", "Dice Game", "Asteroids", "Tic-Tac-Toe", "Info"]
+game_array = ["Snake", "Sudoku", "Dice Game", "Asteroids", "Tic-Tac-Toe", "Wordle","Info"]
 # Modify for our games
 
 
@@ -170,7 +174,7 @@ def main():
         image_path = current_path + "/images/" + game + ".jpg"
         # Open the image using Pillow
         img = Image.open(image_path)
-        button_size = (75, 75)  # Adjust the size as needed
+        button_size = (70, 70)  # Adjust the size as needed
         img = img.resize(button_size)
         # Convert the image to Tkinter PhotoImage
         img = ImageTk.PhotoImage(img)
@@ -191,9 +195,10 @@ def main():
         )
         if game == "Info":
             button.configure(relief=tkinter.GROOVE, activeforeground="#5D3FD3", activebackground="#E2DFD2")
+            button.grid(row=2, column=1, sticky="ew", padx=10, pady=5)
+            continue
         button.image = img  # Keep a reference to the image to prevent garbage collection
-        button.grid(row=i // 2, column=i % 2, sticky="ew", padx=10, pady=5)
-
+        button.grid(row=i // 3, column=i % 3, sticky="ew", padx=10, pady=5)
     
     exit_button = tkinter.Button(
         window,

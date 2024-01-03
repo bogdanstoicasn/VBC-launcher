@@ -185,8 +185,8 @@ def play_snake(window, skin):
 
         pygame.display.update()
 
-        # set 20 fps speed of snake
-        fps.tick(20)
+        # set 12 fps speed of snake
+        fps.tick(12)
 
     return play_again                   
          
