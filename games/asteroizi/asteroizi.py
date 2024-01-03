@@ -8,7 +8,9 @@ pygame.init()
 
 # Variabile pentru scor
 score = 0
+intermediate_score = 0
 lives = 10
+boss_spawned = False
 
 # Variabile pentru stocarea stării tastelor
 left_pressed = False
@@ -55,6 +57,9 @@ alien_bullet_image.fill(GREEN)
 alien_bullet_speed = 4
 alien_bullets = []
 
+# Gloante boss
+boss_bullets = []
+
 # Funcție pentru afișarea extratereștrilor
 def draw_aliens():
     for alien in aliens:
@@ -68,6 +73,40 @@ def generate_alien():
         alien_rect.midtop = (random.randint(0, WIDTH), 0)
         alien = Alien(alien_rect)
         return alien
+
+class BossBullet:
+    def __init__(self, rect, life=2):
+        self.rect = rect
+        self.life = life
+# Adaugă clasa pentru Boss
+class Boss:
+    def __init__(self, rect, image_path, max_lives=20):
+        self.rect = rect
+        self.image = pygame.image.load(image_path)
+        self.image = pygame.transform.scale(self.image, (rect.width, rect.height))
+        self.max_lives = max_lives
+        self.lives = max_lives
+        
+    def move(self):
+        # Mișcare stânga-dreapta
+        if self.rect.left <= 0 or self.rect.right >= WIDTH:
+            # Inversarea direcției dacă atinge marginea ecranului
+            self.speed = -self.speed
+        self.rect.x += self.speed
+
+    def shoot(self):
+        global boss_bullets
+        # Generare proiectile boss de sub el
+        space_between_bullets = 20
+        for i in range(3):
+            boss_bullets.append(BossBullet(pygame.Rect(self.rect.centerx - 5 + i * space_between_bullets, self.rect.bottom, 10, 20)))
+
+# Inițializare boss
+boss_rect = pygame.Rect(WIDTH // 2 - 50, 0, 100, 100)
+boss_image_path = os.path.join(images_path, "boss.png")
+boss = Boss(boss_rect, boss_image_path)
+boss.speed = 2  # Adăugați această linie pentru a seta viteza inițială
+
  
 
 # Încarcă imaginea de fundal
@@ -115,10 +154,15 @@ def draw_ship():
 def draw_bullets():
     for bullet in bullets:
         pygame.draw.rect(screen, RED, bullet)
+    for boss_bullet in boss_bullets:
+        pygame.draw.rect(screen, (0, 128, 0), boss_bullet)
 
 def update_bullets():
     for bullet in bullets:
         bullet.y -= bullet_speed
+    for boss_bullet in boss_bullets:
+        boss_bullet.rect.y += alien_bullet_speed
+    
 
 # Funcție pentru actualizarea pozițiilor extratereștrilor
 def update_aliens():
@@ -181,7 +225,7 @@ def handle_events():
 
 # Funcție pentru gestionarea coliziunilor
 def check_collisions():
-    global score, lives
+    global score, lives, boss_spawned
 
     for bullet in bullets.copy():
         for asteroid in asteroids.copy():
@@ -259,6 +303,35 @@ def check_collisions():
             if bullet.colliderect(alien_bullet):
                 bullets.remove(bullet)
                 alien_bullets.remove(alien_bullet)
+    # Verificare coliziuni între proiectilele navei spațiale și proiectilele boss-ului
+    for bullet in bullets.copy():
+        for boss_bullet in boss_bullets.copy():
+            if bullet.colliderect(boss_bullet.rect):
+                bullets.remove(bullet)
+                boss_bullet.life -= 1
+                if boss_bullet.life <= 0:
+                    boss_bullets.remove(boss_bullet)
+
+
+    # Verificare coliziuni cu boss-ul
+    for bullet in bullets.copy():
+        if bullet.colliderect(boss.rect):
+            bullets.remove(bullet)
+            boss.lives -= 4
+            if boss.lives <= 0:
+                global intermediate_score
+                intermediate_score = 0
+                boss.lives = boss.max_lives  # Resetează viețile la reapariția boss-ului
+                score += 10  # Adaugă puncte pentru eliminarea boss-ului
+
+    # Verificare coliziuni între proiectilele boss-ului și nava spațială
+    for boss_bullet in boss_bullets.copy():
+        if boss_bullet.rect.colliderect(ship_rect):
+            boss_bullets.remove(boss_bullet)
+            lives -= 1
+            if lives <= 0:
+                game_over()
+
 
 # Funcție pentru afișarea ecranului de game over
 def game_over():
@@ -334,19 +407,19 @@ while True:
         ship_rect.y += ship_speed
         if ship_rect.bottom > HEIGHT:
             ship_rect.bottom = HEIGHT
-
+    if not boss_spawned:
     # Generare asteroizi
-    if frame_count % 60 == 0 and random.randint(1, 100) <= 60:
-        asteroids.append(generate_asteroid())
+        if frame_count % 60 == 0 and random.randint(1, 100) <= 60:
+            asteroids.append(generate_asteroid())
 
     # Generare extratereștri
-    if frame_count % 120 == 0 and random.randint(1, 100) <= 50:
-        aliens.append(generate_alien())
+        if frame_count % 120 == 0 and random.randint(1, 100) <= 50:
+            aliens.append(generate_alien())
     
-    if frame_count % 120 == 0 and random.randint(1, 100) <= 50:
-        for new_alien in aliens:
+        if frame_count % 120 == 0 and random.randint(1, 100) <= 50:
+            for new_alien in aliens:
             # Generare proiectil extraterestru pentru fiecare extraterestru
-            alien_bullets.append(pygame.Rect(new_alien.rect.centerx - 5, new_alien.rect.bottom, 10, 20))
+                alien_bullets.append(pygame.Rect(new_alien.rect.centerx - 5, new_alien.rect.bottom, 10, 20))
 
     # Actualizare poziție și verificare coliziuni pentru extratereștri
     update_aliens()
@@ -357,7 +430,14 @@ while True:
     # Actualizare poziție și verificare coliziuni
     update_asteroids()
     update_bullets()
+    copiescore = score
     check_collisions()
+    if(intermediate_score <= 10):
+        if not boss_spawned:
+            intermediate_score += score - copiescore
+        else:
+            boss_spawned = False
+
 
     # Desenare pe ecran
     screen.blit(background_image, (0, 0))  # Afisare imagine de fundal
@@ -371,8 +451,19 @@ while True:
     # Afisare scor
     score_text = font.render(f"Score: {score}", True, (255, 255, 255))
     lives_text = font.render(f"Lives: {lives}", True, (255, 255, 255))
+    intermediate_score_text = font.render(f"Intermediate Score: {intermediate_score}", True, (255, 255, 255))
     screen.blit(score_text, (10, 10))
     screen.blit(lives_text, (10, 10 + score_text.get_height()))
+    screen.blit(intermediate_score_text, (10, 10 + score_text.get_height() + lives_text.get_height()))
+
+    # Spawn boss at intermediate score >= 10
+    if intermediate_score >= 10 and not boss_spawned:
+        boss_spawned = True
+    if boss_spawned:
+        boss.move()
+        if frame_count % 60 == 0 and random.randint(1, 100) <= 50:
+            boss.shoot()
+        screen.blit(boss.image, boss.rect)
 
     # Actualizare ecran
     pygame.display.flip()
