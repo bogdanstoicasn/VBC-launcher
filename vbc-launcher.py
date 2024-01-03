@@ -26,9 +26,11 @@ def enter_game(game):
             case "Dice Game":
                 return play_dice()
             case "Asteroids":
-                return print("Asteroids")
+                # return print("Asteroids")
+                subprocess.run(["python", "./games/asteroizi/asteroizi.py"])
+                return None
             case "Wordle":
-                return print("Wordle")
+                 return print("Wordle")
             case "Info":
                 return webbrowser.open("https://github.com/bogdanstoicasn/VBC-launcher")
             case _:
