@@ -3,69 +3,69 @@ import sys
 import pygame
 import random
 
-# Initializare Pygame
+# Initialize Pygame
 pygame.init()
 
-# Variabile pentru scor
+# Score variables
 score = 0
 intermediate_score = 0
 lives = 10
 boss_spawned = False
 
-# Variabile pentru stocarea stării tastelor
+# Variables for storing key states
 left_pressed = False
 right_pressed = False
 up_pressed = False
 down_pressed = False
 
-# Setări ale ecranului
+# Screen settings
 WIDTH, HEIGHT = 800, 600
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
 pygame.display.set_caption("Asteroid Shooter")
 
-# Culori
+# Colors
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 
-# Setarea caii pentru imagini relativ la directorul scriptului
+# Load spaceship image
 script_dir = os.path.dirname(os.path.abspath(__file__))
 images_path = os.path.join(script_dir, "..", "..", "images", "asteroids images")
 
-# Încarcă imaginea navei spațiale
+# Load spaceship image
 ship_image_path = os.path.join(images_path, "spaceship.png")
 ship_image = pygame.image.load(ship_image_path)
 ship_rect = ship_image.get_rect()
 ship_rect.midbottom = (WIDTH // 2, HEIGHT - 10)
 ship_speed = 7
 
-# Extraterestru
+# Alien
 alien_image_path = os.path.join(images_path, "extraterestru.png")
 alien_image = pygame.image.load(alien_image_path)
 alien_rect = alien_image.get_rect()
 alien_speed = 1
 aliens = []
 
-# Clasa pentru extratereștri
+# Class for Aliens
 class Alien:
     def __init__(self, rect):
         self.rect = rect
 
-# Proiectil extraterestru
+# Alien bullet
 alien_bullet_image = pygame.Surface((10, 20))
 alien_bullet_image.fill(GREEN)
 alien_bullet_speed = 4
 alien_bullets = []
 
-# Gloante boss
+# Boss bullets
 boss_bullets = []
 
-# Funcție pentru afișarea extratereștrilor
+# Function to display aliens
 def draw_aliens():
     for alien in aliens:
         screen.blit(alien_image, alien.rect)
 
-# Funcție pentru generarea extratereștrilor
+# Function for spawning aliens
 def generate_alien():
     global aliens
     if random.randint(1, 100) <= 100:
@@ -78,7 +78,7 @@ class BossBullet:
     def __init__(self, rect, life=2):
         self.rect = rect
         self.life = life
-# Adaugă clasa pentru Boss
+# Add class for Boss
 class Boss:
     def __init__(self, rect, image_path, max_lives=20):
         self.rect = rect
@@ -88,33 +88,33 @@ class Boss:
         self.lives = max_lives
         
     def move(self):
-        # Mișcare stânga-dreapta
+        # Left-right movement
         if self.rect.left <= 0 or self.rect.right >= WIDTH:
-            # Inversarea direcției dacă atinge marginea ecranului
+            # Change direction if it hits the screen edge
             self.speed = -self.speed
         self.rect.x += self.speed
 
     def shoot(self):
         global boss_bullets
-        # Generare proiectile boss de sub el
+        # Generate boss bullets from beneath it
         space_between_bullets = 20
         for i in range(3):
             boss_bullets.append(BossBullet(pygame.Rect(self.rect.centerx - 5 + i * space_between_bullets, self.rect.bottom, 10, 20)))
 
-# Inițializare boss
+# Initialize boss
 boss_rect = pygame.Rect(WIDTH // 2 - 50, 0, 100, 100)
 boss_image_path = os.path.join(images_path, "boss.png")
 boss = Boss(boss_rect, boss_image_path)
-boss.speed = 2  # Adăugați această linie pentru a seta viteza inițială
+boss.speed = 2 
 
  
 
-# Încarcă imaginea de fundal
+# Load background image
 background_image_path = os.path.join(images_path, "background.png")
 background_image = pygame.image.load(background_image_path)
 background_image = pygame.transform.scale(background_image, (WIDTH, HEIGHT))
 
-# Proiectil
+# Bullet
 bullet_image = pygame.Surface((10, 20))
 bullet_image.fill(RED)
 bullet_speed = 6
@@ -134,23 +134,23 @@ alien_image = pygame.transform.scale(alien_image, (alien_image.get_width() // 9,
 # Update the rect objects with the new image sizes
 ship_rect = ship_image.get_rect(midbottom=(WIDTH // 2, HEIGHT - 10))
 
-# Funcție pentru generarea asteroizilor
+# Function to generate asteroids
 def generate_asteroid():
     asteroid_rect = pygame.Rect(0, 0, asteroid_image.get_width(), asteroid_image.get_height())
     asteroid_rect.midtop = (random.randint(0, WIDTH), 0)
     
-    # Probabilitate de 10% pentru asteroizii de dimensiune dublă
+    # 50% probability for double-sized asteroids
     if random.randint(1, 10) <= 5:
         asteroid_rect.size = (asteroid_rect.width * 2, asteroid_rect.height * 2)
         return Asteroid(asteroid_rect, size=2)
     else:
         return Asteroid(asteroid_rect, size=1)
 
-# Funcție pentru afișarea navei spațiale
+# Function to display the spaceship
 def draw_ship():
     screen.blit(ship_image, ship_rect)
 
-# Funcție pentru afișarea proiectilelor
+# Function to display projectiles
 def draw_bullets():
     for bullet in bullets:
         pygame.draw.rect(screen, RED, bullet)
@@ -164,12 +164,12 @@ def update_bullets():
         boss_bullet.rect.y += alien_bullet_speed
     
 
-# Funcție pentru actualizarea pozițiilor extratereștrilor
+# Function to update alien positions
 def update_aliens():
     for alien in aliens.copy():
         alien.rect.y += alien_speed
 
-# Funcție pentru afișarea proiectilelor extratereștrilor
+# Function to display alien projectiles
 def draw_alien_bullets():
     for bullet in alien_bullets:
         pygame.draw.rect(screen, GREEN, bullet)
@@ -179,7 +179,7 @@ def update_alien_bullets():
     for bullet in alien_bullets:
         bullet.y += alien_bullet_speed
 
-# Funcție pentru afișarea asteroizilor
+# Function to display asteroids
 def draw_asteroids():
     for asteroid in asteroids:
         if asteroid.size == 2:
@@ -189,12 +189,12 @@ def draw_asteroids():
         else:
             screen.blit(asteroid_image, asteroid.rect)
 
-# Funcție pentru actualizarea pozițiilor asteroizilor
+# Function to update asteroid positions
 def update_asteroids():
     for asteroid in asteroids.copy():
         asteroid.rect.y += asteroid_speed
 
-# Funcție pentru gestionarea evenimentelor
+# Function to handle events
 def handle_events():
     global left_pressed, right_pressed, up_pressed, down_pressed
 
@@ -223,7 +223,7 @@ def handle_events():
             elif event.key == pygame.K_DOWN:
                 down_pressed = False
 
-# Funcție pentru gestionarea coliziunilor
+# Function for handling collisions
 def check_collisions():
     global score, lives, boss_spawned
 
@@ -233,7 +233,7 @@ def check_collisions():
                 if bullet in bullets:
                     bullets.remove(bullet)
                 if asteroid.size == 2:
-                    # La spargerea unui asteroid de tip 2, genera 2 asteroizi de tip 1
+                    # When a size 2 asteroid is destroyed, generate 2 size 1 asteroids
                     score += 2
                     asteroids.remove(asteroid)
                     asteroids.append(Asteroid(pygame.Rect(asteroid.rect.x, asteroid.rect.y, asteroid.rect.width // 2, asteroid.rect.height // 2), size=1))
@@ -246,24 +246,24 @@ def check_collisions():
         if ship_rect.colliderect(asteroid.rect):
             asteroids.remove(asteroid)
             if asteroid.size == 2:
-                # La impactul cu un asteroid de tip 2, pierzi 2 vieti
+                # When colliding with a size 2 asteroid, lose 2 lives
                 lives -= 2
             else:
                 lives -= 1
             if lives <= 0:
                 game_over()
 
-        # Verifică dacă asteroidul a ieșit din ecran pe partea de jos
+        # Check if the asteroid has gone off the screen on the bottom
         if asteroid.rect.y > HEIGHT:
             asteroids.remove(asteroid)
             if asteroid.size == 2:
-                # Dacă asteroidul de tip 2 iese din ecran, pierzi 2 vieti
+                # If a size 2 asteroid goes off the screen, lose 2 lives
                 lives -= 2
             else:
                 lives -= 1
             if lives <= 0:
                 game_over()
-    # Verificare coliziuni între bullet-ul extratereștrilor și nava spațială
+    # Check collisions between alien bullets and the spaceship
     for alien_bullet in alien_bullets.copy():
         if alien_bullet.colliderect(ship_rect):
             alien_bullets.remove(alien_bullet)
@@ -271,7 +271,7 @@ def check_collisions():
             if lives <= 0:
                 game_over()
 
-    # Verificare coliziuni între bullet-ul roșu și extratereștri
+    # Check collisions between red bullets and aliens
     for bullet in bullets.copy():
         for alien in aliens.copy():
             if bullet.colliderect(alien.rect):
@@ -279,7 +279,7 @@ def check_collisions():
                 aliens.remove(alien)
                 score += 1
 
-    # Verificare coliziuni între nava spațială și extratereștri
+    # Check collisions between spaceship and aliens
     for alien in aliens.copy():
         if ship_rect.colliderect(alien.rect):
             aliens.remove(alien)
@@ -292,18 +292,18 @@ def check_collisions():
             if lives <= 0:
                 game_over()
 
-    # Verificare dacă bullet-ul extratereștrilor iese din ecran
+    # Check if alien bullets go off the screen
     for alien_bullet in alien_bullets.copy():
         if alien_bullet.y > HEIGHT:
             alien_bullets.remove(alien_bullet)
             
-    # Verificare coliziuni între bullet-urile roșii și bullet-urile verzi
+    # Check collisions between red and green bullets
     for bullet in bullets.copy():
         for alien_bullet in alien_bullets.copy():
             if bullet.colliderect(alien_bullet):
                 bullets.remove(bullet)
                 alien_bullets.remove(alien_bullet)
-    # Verificare coliziuni între proiectilele navei spațiale și proiectilele boss-ului
+    # Check collisions between spaceship bullets and boss bullets
     for bullet in bullets.copy():
         for boss_bullet in boss_bullets.copy():
             if bullet.colliderect(boss_bullet.rect):
@@ -313,7 +313,7 @@ def check_collisions():
                     boss_bullets.remove(boss_bullet)
 
 
-    # Verificare coliziuni cu boss-ul
+    # Check collisions with the boss
     for bullet in bullets.copy():
         if bullet.colliderect(boss.rect):
             bullets.remove(bullet)
@@ -321,10 +321,10 @@ def check_collisions():
             if boss.lives <= 0:
                 global intermediate_score
                 intermediate_score = 0
-                boss.lives = boss.max_lives  # Resetează viețile la reapariția boss-ului
-                score += 10  # Adaugă puncte pentru eliminarea boss-ului
+                boss.lives = boss.max_lives  # Reset lives on boss respawn
+                score += 10  # Add points for defeating the boss
 
-    # Verificare coliziuni între proiectilele boss-ului și nava spațială
+    # Check collisions between boss bullets and spaceship
     for boss_bullet in boss_bullets.copy():
         if boss_bullet.rect.colliderect(ship_rect):
             boss_bullets.remove(boss_bullet)
@@ -333,7 +333,7 @@ def check_collisions():
                 game_over()
 
 
-# Funcție pentru afișarea ecranului de game over
+# Function for displaying the game over screen
 def game_over():
     global score, lives
 
@@ -355,7 +355,7 @@ def game_over():
                 pygame.quit()
                 sys.exit()
             elif event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:
-                # Resetează starea jocului
+                # Reset game state
                 global left_pressed, right_pressed, up_pressed, down_pressed
                 score = 0
                 lives = 5
@@ -370,12 +370,22 @@ def game_over():
                 up_pressed = False
                 down_pressed = False
                 waiting_for_retry = False
+                # Reset boss state
+                global boss_spawned
+                boss_spawned = False
+                global boss_bullets
+                boss_bullets = []
+                global intermediate_score
+                intermediate_score = 0
+                global copiescore
+                copiescore = 0
 
 
-# Setează fontul pentru text
+
+# Set the font for text
 font = pygame.font.Font(None, 36)
 
-# Loop principal
+# Main loop
 frame_count = 59
 font = pygame.font.Font(None, 36)
 clock = pygame.time.Clock()
@@ -383,14 +393,14 @@ clock = pygame.time.Clock()
 class Asteroid:
     def __init__(self, rect, size=1):
         self.rect = rect
-        self.size = size  # 1 pentru normal, 2 pentru dublă
+        self.size = size  # 1 for normal, 2 for double
         self.alive = True
 
 while True:
     handle_events()
     frame_count += 1
 
-    # Deplasare nava în funcție de tastele apăsate
+    # Move the spaceship based on pressed keys
     if left_pressed:
         ship_rect.x -= ship_speed
         if ship_rect.right < 0:
@@ -408,26 +418,26 @@ while True:
         if ship_rect.bottom > HEIGHT:
             ship_rect.bottom = HEIGHT
     if not boss_spawned:
-    # Generare asteroizi
+    # Generate asteroids
         if frame_count % 60 == 0 and random.randint(1, 100) <= 60:
             asteroids.append(generate_asteroid())
 
-    # Generare extratereștri
+    # Generate aliens
         if frame_count % 120 == 0 and random.randint(1, 100) <= 50:
             aliens.append(generate_alien())
     
         if frame_count % 120 == 0 and random.randint(1, 100) <= 50:
             for new_alien in aliens:
-            # Generare proiectil extraterestru pentru fiecare extraterestru
+            # Generate alien bullets for each alien
                 alien_bullets.append(pygame.Rect(new_alien.rect.centerx - 5, new_alien.rect.bottom, 10, 20))
 
-    # Actualizare poziție și verificare coliziuni pentru extratereștri
+    # Update position and check collisions for aliens
     update_aliens()
     
-     # Actualizare poziție și verificare coliziuni pentru proiectile extratereștri
+    # Update position and check collisions for alien bullets
     update_alien_bullets()
 
-    # Actualizare poziție și verificare coliziuni
+    # Update position and check collisionsi
     update_asteroids()
     update_bullets()
     copiescore = score
@@ -439,16 +449,16 @@ while True:
             boss_spawned = False
 
 
-    # Desenare pe ecran
+    # Draw on the screen
     screen.blit(background_image, (0, 0))  # Afisare imagine de fundal
     draw_ship()
     draw_bullets()
     draw_asteroids()
-    # Desenare extratereștri și proiectile extratereștri
+    # Draw aliens and alien bullets
     draw_aliens()
     draw_alien_bullets()
 
-    # Afisare scor
+    # Display score
     score_text = font.render(f"Score: {score}", True, (255, 255, 255))
     lives_text = font.render(f"Lives: {lives}", True, (255, 255, 255))
     intermediate_score_text = font.render(f"Intermediate Score: {intermediate_score}", True, (255, 255, 255))
@@ -465,7 +475,7 @@ while True:
             boss.shoot()
         screen.blit(boss.image, boss.rect)
 
-    # Actualizare ecran
+    # Update the screen
     pygame.display.flip()
 
     # Control FPS
