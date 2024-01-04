@@ -29,7 +29,8 @@ def enter_game(game):
                 subprocess.run(["python", "./games/asteroizi/asteroizi.py"])
                 return None
             case "Wordle":
-                 return print("Wordle")
+                subprocess.run(["python", "./games/wordle/wordle.py"])
+                return print("Wordle")
             case "Info":
                 return webbrowser.open("https://github.com/bogdanstoicasn/VBC-launcher")
             case _:
@@ -48,7 +49,7 @@ def enter_game(game):
             subprocess.run(["python", "./games/asteroizi/asteroizi.py"])
             return None
         elif game == "Wordle":
-            return print("Wordle")
+            return None
         elif game == "Info":
             return webbrowser.open("https://github.com/bogdanstoicasn/VBC-launcher")
         else:

@@ -45,7 +45,7 @@ class WordleGame:
         self.create_widgets()
         self.load_score()
 
-        # Adaugă butonul pentru a primi un indiciu
+        # Add button
         hint_button = tk.Button(self.master, text="Get Hint", command=self.get_hint)
         hint_button.pack()
 
@@ -153,18 +153,14 @@ class WordleGame:
         self.score -= 1
         self.hints_taken += 1
 
-        # Obține o literă diferită față de cele deja obținute
         remaining_letters = list(self.word_to_guess)
-
+        #Obtain a different letter
         for letter in self.hint_letters_taken:
             if letter in remaining_letters:
                 remaining_letters.remove(letter)
 
         hint_letter = random.choice([l for l in remaining_letters])
-
-        # Adaugă litera la lista de litere obținute prin hint-uri
         self.hint_letters_taken.append(hint_letter)
-        # Afișează litera obținută prin hint
         messagebox.showinfo("Hint", f"The word contains the letter '{hint_letter}'.")
         self.score = self.score - 1 
         self.update_score()
