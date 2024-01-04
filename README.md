@@ -1,5 +1,5 @@
 # VBC-launcher
-A simple game launcher written in Python using Tkinter. Launch your favorite games with a click!
+A simple game launcher written in Python using Tkinter and Pygame. Launch your favorite games with a click!
 
 ## Features
 
