@@ -1,6 +1,12 @@
 # VBC-launcher
 A simple game launcher written in Python using Tkinter and Pygame. Launch your favorite games with a click!
 
+### Our Team
+
+- **Stoica Bogdan-Mihai 325CA**
+- **Vulpe Cezar-Andrei 325CA**
+- **Muntean Vlad-Andrei 325CA**
+
 ## Features
 
 - Launch popular games with a single click.
@@ -48,7 +54,7 @@ A simple game launcher written in Python using Tkinter and Pygame. Launch your f
     cd VBC-launcher
 
 
-### Docker(not recommended):
+### Docker(not recommended - LINUX ONLY):
 
 `Step 3.1: docker build -t your_image_name .`
 <code>
@@ -102,6 +108,34 @@ launcher(can run excutables/Python scripts).
 
 
 # Contributors
+
+**Bogdan**:
+
+- Created launcher app
+- Built Tic-tac-toe and Sudoku games
+- Fixed bugs for platform compatibility and docker
+- Challenges met: getting used to the **tkinter** interface and reduced number of widgets + developing the Sudoku generation algorithm
+- Solutions: Generating the table line by line with verifications at each step. If verification fails, the line is regenerated
+
+
+**Cezar**:
+
+- Developed Asteroids and Wordle games
+- Fixed bugs for launcher integration
+- Challenges met: Familiarizing with the Pygame library and resolving the *"bullet not in list"* error for multiple collisions in the Asteroids game + optimising performance of Asteroids.
+- Solutions: Check if bullet is in list + deleting entities that go offscreen
+
+
+**Vlad**:
+
+- Developed Dice Game and Snake Game
+- Fixed display bugs and system compatibility issues
+- Challenges met: Familiarizing with the Pygame library, every time the *run_snake* function was imported in launcher, generating and empty Pygame window + making a graphic selection screen for Snake skins + making the rolling hand GIF play in Dice Game
+- Solutions: Encapsulated the pygame initialisation and window creation in the *run_snake* command to generate a new window every run + generating a triangle that moves to the center of the selected text for the snake's skin + rendering the GIF's frame one at a time
+
+
+### Statistics
+
 
 [![GitHub contributors](https://img.shields.io/github/contributors/bogdanstoicasn/VBC-launcher.svg)](https://github.com/bogdanstoicasn/VBC-launcher/graphs/contributors)
 
