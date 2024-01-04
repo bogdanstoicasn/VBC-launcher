@@ -32,7 +32,7 @@ def enter_game(game):
                 subprocess.run(["python3", current_path + "/games/asteroizi/asteroizi.py"])
                 return None
             case "Wordle":
-                subprocess.run(["python3", current_path + "./games/wordle/wordle.py"])
+                subprocess.run(["python3", current_path + "/games/wordle/wordle.py"])
                 return print("Wordle")
             case "Info":
                 return webbrowser.open("https://github.com/bogdanstoicasn/VBC-launcher")
