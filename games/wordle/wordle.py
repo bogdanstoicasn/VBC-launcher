@@ -65,13 +65,13 @@ class WordleGame:
                 entry.bind('<Return>', lambda event, r=row, c=col: self.check_result_on_cell(r, c))
 
     def on_key_press(self, event, row, column):
-        char = event.char.lower()
+        char = event.char.upper()
         if char.isalpha() and len(char) == 1:
             self.guesses[row][column] = char
             self.move_to_next_cell()
 
     def on_var_change(self, row, column, var):
-        value = var.get()
+        value = var.get().upper()
         if len(value) > 1:
             var.set(value[-1])
         self.guesses[row][column] = value
