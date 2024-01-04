@@ -15,6 +15,9 @@ from games.snake.snake import run_snake
 
 # add here imports and the game running function
 def enter_game(game):
+
+    current_path = os.path.dirname(os.path.realpath(__file__))
+
     try:
         match game:
             case "Tic-Tac-Toe":
@@ -26,10 +29,10 @@ def enter_game(game):
             case "Dice Game":
                 return play_dice()
             case "Asteroids":
-                subprocess.run(["python", "./games/asteroizi/asteroizi.py"])
+                subprocess.run(["python", current_path + "/games/asteroizi/asteroizi.py"])
                 return None
             case "Wordle":
-                subprocess.run(["python", "./games/wordle/wordle.py"])
+                subprocess.run(["python", current_path + "./games/wordle/wordle.py"])
                 return print("Wordle")
             case "Info":
                 return webbrowser.open("https://github.com/bogdanstoicasn/VBC-launcher")
@@ -46,9 +49,10 @@ def enter_game(game):
         elif game == "Dice Game":
             return play_dice()
         elif game == "Asteroids":
-            subprocess.run(["python", "./games/asteroizi/asteroizi.py"])
+            subprocess.run(["python", current_path + "/games/asteroizi/asteroizi.py"])
             return None
         elif game == "Wordle":
+            subprocess.run(["python", current_path + "/games/wordle/wordle.py"])
             return None
         elif game == "Info":
             return webbrowser.open("https://github.com/bogdanstoicasn/VBC-launcher")
