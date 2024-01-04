@@ -107,7 +107,7 @@ Upgrade pip and pillow:
 launcher(can run excutables/Python scripts).
 
 
-# Contributors
+## Contributors
 
 **Bogdan**:
 
@@ -132,6 +132,11 @@ launcher(can run excutables/Python scripts).
 - Fixed display bugs and system compatibility issues
 - Challenges met: Familiarizing with the Pygame library, every time the *run_snake* function was imported in launcher, generating and empty Pygame window + making a graphic selection screen for Snake skins + making the rolling hand GIF play in Dice Game
 - Solutions: Encapsulated the pygame initialisation and window creation in the *run_snake* command to generate a new window every run + generating a triangle that moves to the center of the selected text for the snake's skin + rendering the GIF's frame one at a time
+
+### Resources
+
+->[pygame](https://www.pygame.org/news)
+->[tkinter](https://docs.python.org/3/library/tkinter.html)
 
 
 ### Statistics
