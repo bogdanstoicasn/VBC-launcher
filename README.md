@@ -3,7 +3,7 @@ A simple game launcher written in Python using Tkinter and Pygame. Launch your f
 
 ### Our Team
 
-- **Stoica Bogdan-Mihai 325CA**
+- **Stoica Mihai-Bogdan 325CA**
 - **Vulpe Cezar-Andrei 325CA**
 - **Muntean Vlad-Andrei 325CA**
 
@@ -136,6 +136,7 @@ launcher(can run excutables/Python scripts).
 ### Resources
 
 ->[pygame](https://www.pygame.org/news)
+
 ->[tkinter](https://docs.python.org/3/library/tkinter.html)
 
 
