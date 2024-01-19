@@ -32,7 +32,7 @@ A simple game launcher written in Python using Tkinter and Pygame. Launch your f
    - Control a snake to eat food and grow longer without hitting the walls.
 
 6. **Worlde**
-    - A game with words
+    - A game with words.
 
 ## Requirements
 
